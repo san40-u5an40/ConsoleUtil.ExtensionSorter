@@ -30,6 +30,5 @@
             else
                 extStat.Add(ext, 1);
         }
-            
     }
 }

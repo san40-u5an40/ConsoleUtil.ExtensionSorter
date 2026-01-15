@@ -2,3 +2,4 @@
 global using System.Collections.Generic;
 global using System.IO;
 global using System.Linq;
+global using san40_u5an40.Arguments;

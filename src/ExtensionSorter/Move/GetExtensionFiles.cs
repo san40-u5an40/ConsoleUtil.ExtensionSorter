@@ -4,7 +4,7 @@
     // 
     // Рекурсивно перебираются все подпапки в указанной директории
     // И файлы из них добавляются в библиотеку
-    private static void GetExtensionFiles(Dictionary<string, List<FileInfo>> extFiles, DirectoryInfo dir)
+    private static void GetExtensionFiles(Dictionary<string, List<FileInfo>> extFilesDictionary, DirectoryInfo dir)
     {
         try
         {
@@ -13,22 +13,22 @@
                 .Where(p => p.Name != "System Volume Information" && p.Name != "$Recycle.Bin" && p.Name != "Documents and Settings");
 
             foreach (var dirInfo in dirs)
-                GetExtensionFiles(extFiles, dirInfo);
+                GetExtensionFiles(extFilesDictionary, dirInfo);
         }
         catch (UnauthorizedAccessException)
         {
             Console.WriteLine($"Нет доступа к расположению: \"{dir.FullName}\"");
         }
 
-        var files = dir.GetFiles();
-        foreach (var file in files)
+        var directoryFiles = dir.GetFiles();
+        foreach (var file in directoryFiles)
         {
             string ext = file.Extension.ToLower();
 
-            if (extFiles.ContainsKey(ext))
-                extFiles[ext].Add(file);
+            if (extFilesDictionary.TryGetValue(ext, out List<FileInfo>? extFiles))
+                extFiles.Add(file);
             else
-                extFiles[ext] = new List<FileInfo> { file };
+                extFilesDictionary[ext] = [file];
         }
     }
 }
